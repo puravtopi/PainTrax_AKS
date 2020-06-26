@@ -2751,6 +2751,8 @@ public partial class PatientIntakeList : System.Web.UI.Page
 
         string folderPath = Server.MapPath("~/Reports/" + lnk.CommandArgument);
 
+        ClientScript.RegisterStartupScript(this.GetType(), "Popup", "alert('Documents will be available soon for download.')", true);
+
         // DownloadFiles(folderPath, "IE");
 
         savePrintRequest(lnk.CommandArgument, "0");
@@ -2780,19 +2782,32 @@ public partial class PatientIntakeList : System.Web.UI.Page
 
     public bool downloadVisible(string PatientIEID = "0", string PatientFUID = "0")
     {
-        DBHelperClass db = new DBHelperClass();
-        string query = "";
+        //DBHelperClass db = new DBHelperClass();
+        //string query = "";
+        //if (PatientIEID != "0")
+        //    query = "select * from tblPrintRequestTime where PatientIE_Id=" + PatientIEID;
+        //else
+        //    query = "select * from tblPrintRequestTime where PatientFU_Id=" + PatientFUID;
+
+        //DataSet ds = db.selectData(query);
+
+        //if (ds != null && ds.Tables[0].Rows.Count > 0)
+        //{
+        //    return true;
+        //}
+        //else
+        //    return false;
+
+        string folderID = "";
         if (PatientIEID != "0")
-            query = "select * from tblPrintRequestTime where PatientIE_Id=" + PatientIEID;
+            folderID = PatientIEID;
         else
-            query = "select * from tblPrintRequestTime where PatientFU_Id=" + PatientFUID;
+            folderID = PatientFUID;
 
-        DataSet ds = db.selectData(query);
+        string path = Server.MapPath("~/Reports/Done/" + folderID);
 
-        if (ds != null && ds.Tables[0].Rows.Count > 0)
-        {
+        if (Directory.Exists(path))
             return true;
-        }
         else
             return false;
 
@@ -3179,7 +3194,9 @@ public partial class PatientIntakeList : System.Web.UI.Page
             sWriter.Write(sw.ToString());
             sWriter.Close();
 
-            downloadfile(strFileName);
+
+
+          //  downloadfile(strFileName);
 
             //HttpContext.Current.Response.Clear();
             //HttpContext.Current.Response.Charset = "";
@@ -4642,7 +4659,7 @@ public partial class PatientIntakeList : System.Web.UI.Page
 
         createWordDocument(str, docname, PatientFU_ID, "");
 
-
+        ClientScript.RegisterStartupScript(this.GetType(), "Popup", "alert('Documents will be available soon for download.')", true);
         savePrintRequest("0", PatientFU_ID);
 
         // string folderPath = Server.MapPath("~/Reports/" + PatientFU_ID);
